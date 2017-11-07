@@ -10,3 +10,14 @@
     color: rgb(219, 202, 202);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+
+.slide-in-right.animate {
+    position: relative;
+    animation-name: slide-in-right;
+    animation-duration: 500ms;
+}
+
+@keyframes slide-in-right {
+    from {left: 100%;}
+    to {left: 0%;}
+}

@@ -19,6 +19,7 @@ function updateWindowTitles(str) {
     var elems = document.getElementsByClassName("window-title");
     for( var i=0; i < elems.length; i++ ) {
         elems[i].innerHTML = str;
+        reAnimate(elems[i]);
     }
 }
 
@@ -36,4 +37,11 @@ function stripWindowSuffixes(str) {
         }
     }
     return str.substring(0, str.length-cutAmount);
+}
+
+function reAnimate(elem) {
+    elem.parentNode.classList.remove("animate");
+    setTimeout(function() {
+        elem.parentNode.classList.add("animate");
+    }, 50);
 }
