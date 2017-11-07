@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	krigoapp "github.com/Necroforger/KrigoApparatusScriptor"
-	"github.com/Necroforger/KrigoApparatusScriptor/window"
+	"github.com/Necroforger/krigoapp"
+	"github.com/Necroforger/krigoapp/window"
 )
 
 // vars
