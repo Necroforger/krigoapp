@@ -1,0 +1,12 @@
+.window-container {
+    background-color: rgb(58, 52, 52);
+    color: white;
+    padding: 10px;
+    float: left;
+    border: 1px solid red;
+}
+
+.window-title {
+    color: rgb(219, 202, 202);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
