@@ -3,8 +3,9 @@
 #include "stdio.h"
 
 HWND foregroundWindow();
-char * getWindowText();
-int wcharlen();
+WCHAR * windowText(HWND);
+int wcharlen(WCHAR * str);
+int listWindows(HWND *);
 
 HWND foregroundWindow() {
     HWND window = GetForegroundWindow();
