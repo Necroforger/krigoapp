@@ -16,8 +16,6 @@ import (
 
 // vars
 var (
-	WindowTitle string
-
 	mu            sync.Mutex
 	TrackedWindow *window.HWND
 
