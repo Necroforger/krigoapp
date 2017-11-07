@@ -29,6 +29,23 @@ func GetForegroundWindow() *HWND {
 	}
 }
 
+// GetAllWindows Returns all open windows
+func GetAllWindows() []*HWND {
+	handles := C.getAllWindows()
+	handlesArray :=
+		(*[1 << 30]C.HWND)(unsafe.Pointer(handles.handles))[:handles.count:handles.count]
+
+	hwnds := make([]*HWND, handles.count)
+	for i := 0; i < int(handles.count); i++ {
+		hwnds[i] = &HWND{
+			hwnd: handlesArray[i],
+		}
+	}
+
+	C.free(unsafe.Pointer(handles.handles))
+	return hwnds
+}
+
 // UTF16ToString ...
 func UTF16ToString(s []uint16) string {
 	for i, v := range s {

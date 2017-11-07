@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -31,10 +32,11 @@ func handleError(err error) {
 }
 
 func printMenu() {
-	fmt.Println("=======================")
-	fmt.Println("| 1. Select window    |")
-	fmt.Println("| 9. Exit             |")
-	fmt.Println("=======================")
+	fmt.Println("================================")
+	fmt.Println("| 1. Select window              |")
+	fmt.Println("| 2. Select window from list    |")
+	fmt.Println("| 9. Exit                       |")
+	fmt.Println("================================")
 }
 
 func shell(s *krigoapp.Server) {
@@ -62,6 +64,8 @@ func execCommand(s *krigoapp.Server, line string) {
 	switch {
 	case line == "1":
 		setWindow(s)
+	case line == "2":
+		setWindowFromList(s)
 	case line == "9":
 		fmt.Println("Exiting...")
 		s.Close()
@@ -80,6 +84,34 @@ func setWindow(s *krigoapp.Server) {
 
 	mu.Lock()
 	TrackedWindow = window.GetForegroundWindow()
+	mu.Unlock()
+
+	fmt.Println("Capturing window [", TrackedWindow.Title(), "]")
+}
+
+func setWindowFromList(s *krigoapp.Server) {
+	windows := window.GetAllWindows()
+	for i := len(windows) - 1; i >= 0; i-- {
+		w := windows[i]
+		if title := w.Title(); strings.TrimSpace(title) != "" {
+			fmt.Printf("[%d] : %s\n", i, title)
+		}
+	}
+
+	fmt.Println("Please select the desired window from the list.")
+	fmt.Println("Enter a noninteger or number less than 0 to cancel")
+	fmt.Printf("> ")
+	line, err := readline()
+	handleError(err)
+
+	n, err := strconv.Atoi(strings.TrimSpace(line))
+	if err != nil || n < 0 || n >= len(windows) {
+		fmt.Println("Cancelled..")
+		return
+	}
+
+	mu.Lock()
+	TrackedWindow = windows[n]
 	mu.Unlock()
 
 	fmt.Println("Capturing window [", TrackedWindow.Title(), "]")
