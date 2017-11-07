@@ -28,6 +28,7 @@ function stripWindowSuffixes(str) {
         " - YouTube - YouTube - Google Chrome",
         " - YouTube - Google Chrome",
         " - Google Chrome",
+        " - Mozilla Firefox",
     ];
 
     var cutAmount = 0;
