@@ -101,6 +101,7 @@ func updateTitle(s *krigoapp.Server) {
 
 func main() {
 	server := krigoapp.NewServer(*PublicFolder, *Address)
+	fmt.Printf("Running server on [%s]\n", *Address)
 	go shell(server)
 	go updateTitle(server)
 	err := server.Start()
