@@ -36,6 +36,7 @@ func printMenu() {
 	fmt.Println("| 1. Select window              |")
 	fmt.Println("| 2. Select window from list    |")
 	fmt.Println("| 3. Stop tracking window       |")
+	fmt.Println("| 4. Clear info                 |")
 	fmt.Println("| 9. Exit                       |")
 	fmt.Println("================================")
 }
@@ -73,6 +74,11 @@ func execCommand(s *krigoapp.Server, line string) {
 		mu.Unlock()
 		s.SetWindowTitle("")
 		fmt.Println("Stopped tracking window title")
+	case line == "4":
+		s.SetWindowTitle("")
+		s.SetVideoURL("")
+		s.SetThumbnailURL("")
+		fmt.Println("Cleared tracked info")
 	case line == "9":
 		fmt.Println("Exiting...")
 		s.Close()
