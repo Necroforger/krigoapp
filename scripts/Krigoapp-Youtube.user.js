@@ -9,7 +9,6 @@
 // ==/UserScript==
 
 (function () {
-    var port = "7777";
     'use strict';
 
     var videoTitle = "";
@@ -17,15 +16,15 @@
     var videoURL = "";
     var videoID = "";
 
-    setInterval(function() {
+    setInterval(function () {
         videoURL = window.location.href;
         videoID = getParameterByName("v");
-        videoThumbnail = "https://i.ytimg.com/vi/" + videoID + "/maxresdefault.jpg";
+        videoThumbnail = "https://i.ytimg.com/vi/" + videoID + "/hqdefault.jpg";
         videoTitle = document.getElementsByClassName("title")[0].innerHTML;
 
         GM_xmlhttpRequest({
             method: "GET",
-            url: "http://127.0.0.1:" + port +"/update" +
+            url: "http://127.0.0.1:7777/update" +
             "?windowTitle=" + videoTitle +
             "&thumbnailURL=" + videoThumbnail +
             "&videoURL=" + videoURL
