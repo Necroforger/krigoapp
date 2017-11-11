@@ -25,9 +25,9 @@
         GM_xmlhttpRequest({
             method: "GET",
             url: "http://127.0.0.1:7777/update" +
-            "?windowTitle=" + encodeURI(videoTitle) +
-            "&thumbnailURL=" + encodeURI(videoThumbnail) +
-            "&videoURL=" + encodeURI(videoURL)
+            "?windowTitle=" + encodeURIComponent(videoTitle) +
+            "&thumbnailURL=" + encodeURIComponent(videoThumbnail) +
+            "&videoURL=" + encodeURIComponent(window.location.href)
         });
 
     }, 1000);
