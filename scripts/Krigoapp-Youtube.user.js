@@ -27,7 +27,7 @@
             url: "http://127.0.0.1:7777/update" +
             "?windowTitle=" + encodeURIComponent(videoTitle) +
             "&thumbnailURL=" + encodeURIComponent(videoThumbnail) +
-            "&videoURL=" + encodeURIComponent(window.location.href)
+            "&videoURL=" + encodeURIComponent(videoURL)
         });
 
     }, 1000);
