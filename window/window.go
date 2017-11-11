@@ -22,6 +22,11 @@ func (h *HWND) Title() string {
 	return gostr
 }
 
+// Move a window.
+func (h *HWND) Move(x, y, width, height, repaint int) int {
+	return int(C.MoveWindow(h.hwnd, C.int(x), C.int(y), C.int(width), C.int(height), C.WINBOOL(repaint)))
+}
+
 // GetForegroundWindow ...
 func GetForegroundWindow() *HWND {
 	return &HWND{

@@ -5,19 +5,49 @@ window.addEventListener("load", function () {
     ws.onmessage = function (e) {
         var data = JSON.parse(e.data);
         console.log(data);
-        if (data.windowTitle) {
-            updateWindowTitles(data.windowTitle);
-        }
 
+        switch (data.name) {
+            case "windowTitle":
+                updateWindowTitles(data.content);
+                break;
+            case "videoURL":
+                updateVideoURLs(data.content);
+                break;
+            case "thumbnailURL":
+                updateThumbnails(data.content);
+                break;
+            default:
+                console.log("Event: " + event.name + " not supported");
+        }
     };
 });
 
-function updateWindowTitles(str) {  
+
+function updateThumbnails(thumbnailURL) {
+    console.log("updating video thumbnails: " + thumbnailURL);
+
+    var elems = document.getElementsByClassName("video-thumbnail");
+    for (var i=0; i < elems.length; i++) {
+        elems[i].src = thumbnailURL;
+        reAnimate(elems[i]);
+    }
+}
+
+function updateWindowTitles(str) {
     str = stripWindowSuffixes(str);
 
     console.log("updating window titles: " + str);
     var elems = document.getElementsByClassName("window-title");
-    for( var i=0; i < elems.length; i++ ) {
+    for (var i = 0; i < elems.length; i++) {
+        elems[i].innerHTML = str;
+        reAnimate(elems[i]);
+    }
+}
+
+function updateVideoURLs(str) {
+    console.log("updating video URLs: " + str);
+    var elems = document.getElementsByClassName("video-url");
+    for (var i = 0; i < elems.length; i++) {
         elems[i].innerHTML = str;
         reAnimate(elems[i]);
     }
@@ -32,17 +62,17 @@ function stripWindowSuffixes(str) {
     ];
 
     var cutAmount = 0;
-    for (var i=0; i < suffixes.length; i++) {
+    for (var i = 0; i < suffixes.length; i++) {
         if (str.endsWith(suffixes[i])) {
             cutAmount = Math.max(cutAmount, suffixes[i].length);
         }
     }
-    return str.substring(0, str.length-cutAmount);
+    return str.substring(0, str.length - cutAmount);
 }
 
 function reAnimate(elem) {
     elem.parentNode.classList.remove("animate");
-    setTimeout(function() {
+    setTimeout(function () {
         elem.parentNode.classList.add("animate");
     }, 50);
 }

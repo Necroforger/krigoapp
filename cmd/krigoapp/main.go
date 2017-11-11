@@ -35,6 +35,7 @@ func printMenu() {
 	fmt.Println("================================")
 	fmt.Println("| 1. Select window              |")
 	fmt.Println("| 2. Select window from list    |")
+	fmt.Println("| 3. Stop tracking window       |")
 	fmt.Println("| 9. Exit                       |")
 	fmt.Println("================================")
 }
@@ -62,10 +63,16 @@ func readline() (string, error) {
 
 func execCommand(s *krigoapp.Server, line string) {
 	switch {
-	case line == "1":
+	case line == "1": // Select window
 		setWindow(s)
-	case line == "2":
+	case line == "2": // Select window from list
 		setWindowFromList(s)
+	case line == "3": // Stop tracking window
+		mu.Lock()
+		TrackedWindow = nil
+		mu.Unlock()
+		s.SetWindowTitle("")
+		fmt.Println("Stopped tracking window title")
 	case line == "9":
 		fmt.Println("Exiting...")
 		s.Close()
@@ -97,7 +104,7 @@ func setWindowFromList(s *krigoapp.Server) {
 			fmt.Printf("[%d] : %s\n", i, title)
 		}
 	}
-
+	fmt.Println("===============================================")
 	fmt.Println("Please select the desired window from the list.")
 	fmt.Println("Enter a noninteger or number less than 0 to cancel")
 	fmt.Printf("> ")

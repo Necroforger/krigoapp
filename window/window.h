@@ -10,8 +10,7 @@ ListOfHandles_t getAllWindows();
 BOOL CALLBACK getAllWindowsProc(HWND handle, LPARAM lParam);
 
 HWND foregroundWindow() {
-    HWND window = GetForegroundWindow();
-    return window;
+    return GetForegroundWindow();;
 }
 
 typedef struct ListOfHandles {

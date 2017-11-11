@@ -3,16 +3,16 @@ package krigoapp
 import (
 	"net/http"
 	"sync"
-	"time"
 
 	"github.com/gorilla/mux"
 
 	"github.com/gorilla/websocket"
 )
 
-// Update is the update information sent over websocket
-type Update struct {
-	WindowTitle string `json:"windowTitle"`
+// Event is the update information sent over websocket
+type Event struct {
+	Name string `json:"name"`
+	Data string `json:"content"`
 }
 
 // Server ...
@@ -27,6 +27,12 @@ type Server struct {
 	// WindowTitle current title of the selected window
 	WindowTitle string
 
+	// Thumbnail is a URL to the thumbnail of the currently playing song
+	ThumbnailURL string
+
+	// VideoURL is the URL of the current song
+	VideoURL string
+
 	// Directory the server will serve files from
 	Servedir string
 }
@@ -39,6 +45,7 @@ func NewServer(servedir string, addr string) *Server {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ws/", s.wsHandler)
+	r.HandleFunc("/update", s.UpdateHandler)
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir(servedir)))
 
 	s.Server = &http.Server{
@@ -55,6 +62,20 @@ func (s *Server) SetWindowTitle(title string) {
 	s.mu.Unlock()
 }
 
+// SetThumbnailURL sets the thumbnail URL of the server.
+func (s *Server) SetThumbnailURL(URL string) {
+	s.mu.Lock()
+	s.ThumbnailURL = URL
+	s.mu.Unlock()
+}
+
+// SetVideoURL sets the video URL
+func (s *Server) SetVideoURL(URL string) {
+	s.mu.Lock()
+	s.VideoURL = URL
+	s.mu.Unlock()
+}
+
 // Start begins listening for connections and hotkeys
 func (s *Server) Start() error {
 	s.close = make(chan int)
@@ -67,38 +88,4 @@ func (s *Server) Close() error {
 		close(s.close)
 	}
 	return s.Server.Close()
-}
-
-// wsHandler handles websocket connections
-func (s *Server) wsHandler(w http.ResponseWriter, r *http.Request) {
-	ws, err := s.upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		return
-	}
-
-	var lastTitle string
-
-	for {
-		// Avoid sending duplicate data
-		s.mu.Lock()
-		if lastTitle == s.WindowTitle {
-			s.mu.Unlock()
-			continue
-		}
-		lastTitle = s.WindowTitle
-		data := Update{
-			WindowTitle: s.WindowTitle,
-		}
-		s.mu.Unlock()
-
-		err = ws.WriteJSON(data)
-		if err != nil {
-			return
-		}
-
-		select {
-		case <-time.After(time.Millisecond * 500):
-		case <-s.close:
-		}
-	}
 }
