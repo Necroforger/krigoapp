@@ -78,6 +78,8 @@ func execCommand(s *krigoapp.Server, line string) {
 		s.SetWindowTitle("")
 		s.SetVideoURL("")
 		s.SetThumbnailURL("")
+		s.SetCurrentTime(0)
+		s.SetDuration(0)
 		fmt.Println("Cleared tracked info")
 	case line == "9":
 		fmt.Println("Exiting...")
@@ -131,7 +133,7 @@ func setWindowFromList(s *krigoapp.Server) {
 }
 
 // updateTitle continuously updates the window title
-func updateTitle(s *krigoapp.Server) {
+func titleManager(s *krigoapp.Server) {
 	ticker := time.NewTicker(time.Second * 1)
 	for _ = range ticker.C {
 		mu.Lock()
@@ -146,7 +148,7 @@ func main() {
 	server := krigoapp.NewServer(*PublicFolder, *Address)
 	fmt.Printf("Running server on [%s]\n", *Address)
 	go shell(server)
-	go updateTitle(server)
+	go titleManager(server)
 	err := server.Start()
 	if err != nil {
 		fmt.Println(err)

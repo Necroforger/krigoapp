@@ -1,15 +1,20 @@
 <html>
-<script src="/js/index.js"></script>
-<script src="/js/reconnecting-websocket.min.js"></script>
+<head>
+    <script src="/js/index.js"></script>
+    <script src="/js/reconnecting-websocket.min.js"></script>
+</head>
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 
 <body>
-    <div class='window-container'>
-        <span class='window-title'>==============</span>
-        <hr>
-        <span class="video-url"></span>
-        <br>
-        <img width="250px" class="video-thumbnail">
+    <div class='window-container video-progress'>
+        <p class='window-title'>==============</p>
+        <div class='thumbnail-container'>
+            <p class="video-url"></p>
+            <img class="video-thumbnail">
+        </div>
+        <p>
+            <span class='video-current-time'></span><span>/</span><span class='video-duration'></span>
+        </p>
     </div>
 </body>
 

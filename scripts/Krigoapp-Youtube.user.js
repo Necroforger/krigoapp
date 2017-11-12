@@ -11,23 +11,28 @@
 (function () {
     'use strict';
 
-    var videoTitle = "";
-    var videoThumbnail = "";
-    var videoURL = "";
-    var videoID = "";
+
+    var ytplayer,
+        videoData,
+        videoURL,
+        videoThumbnail;
 
     setInterval(function () {
-        videoURL = window.location.href;
-        videoID = getParameterByName("v");
-        videoThumbnail = "https://i.ytimg.com/vi/" + videoID + "/hqdefault.jpg";
-        videoTitle = document.getElementsByClassName("title")[0].innerHTML;
+        ytplayer       = document.getElementById("movie_player");
+        videoData      = ytplayer.getVideoData();
+        videoURL       = "youtu.be/"+ videoData.video_id;
+        // // Include the playlist ID in the link
+        // if (ytplayer.getPlaylistId() !== "") videoURL += "?list="+ytplayer.getPlaylistId();
+        videoThumbnail = "https://i.ytimg.com/vi/" + videoData.video_id + "/hqdefault.jpg";
 
         GM_xmlhttpRequest({
             method: "GET",
-            url: "http://127.0.0.1:7777/update" +
-            "?windowTitle=" + encodeURIComponent(videoTitle) +
-            "&thumbnailURL=" + encodeURIComponent(videoThumbnail) +
-            "&videoURL=" + encodeURIComponent(videoURL)
+            url: "http://127.0.0.1:7777/update"  +
+            "?windowTitle="  + encodeURIComponent(videoData.title) +
+            "&thumbnailURL=" + encodeURIComponent(videoThumbnail)  +
+            "&videoURL="     + encodeURIComponent(videoURL) +
+            "&currentTime="  + encodeURIComponent(ytplayer.getCurrentTime()) +
+            "&duration="     + encodeURIComponent(ytplayer.getDuration())
         });
 
     }, 1000);

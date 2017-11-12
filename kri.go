@@ -33,6 +33,9 @@ type Server struct {
 	// VideoURL is the URL of the current song
 	VideoURL string
 
+	CurrentTime float64
+	Duration    float64
+
 	// Directory the server will serve files from
 	Servedir string
 }
@@ -76,16 +79,34 @@ func (s *Server) SetVideoURL(URL string) {
 	s.mu.Unlock()
 }
 
+// SetCurrentTime sets the current time
+func (s *Server) SetCurrentTime(t float64) {
+	s.mu.Lock()
+	s.CurrentTime = t
+	s.mu.Unlock()
+}
+
+// SetDuration sets the duration
+func (s *Server) SetDuration(t float64) {
+	s.mu.Lock()
+	s.Duration = t
+	s.mu.Unlock()
+}
+
 // Start begins listening for connections and hotkeys
 func (s *Server) Start() error {
+	s.mu.Lock()
 	s.close = make(chan int)
+	s.mu.Unlock()
 	return s.Server.ListenAndServe()
 }
 
 // Close closes the running server
 func (s *Server) Close() error {
+	s.mu.Lock()
 	if s.close != nil {
 		close(s.close)
 	}
+	s.mu.Unlock()
 	return s.Server.Close()
 }
