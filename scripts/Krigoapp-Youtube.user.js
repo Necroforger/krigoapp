@@ -18,7 +18,7 @@
         videoThumbnail;
 
     setInterval(function () {
-        ytplayer       = document.getElementById("movie_player");
+        ytplayer       = document.querySelector("div[id^='player_']") || document.getElementById("movie_player");
         videoData      = ytplayer.getVideoData();
         videoURL       = "youtu.be/"+ videoData.video_id;
         // // Include the playlist ID in the link
